@@ -1,16 +1,24 @@
 package com.example.demo_reactive.service;
 
 import com.example.demo_reactive.dto.Person;
+import com.example.demo_reactive.dto.User;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 
 @Service
+@RequiredArgsConstructor
 public class PersonService {
+
+    private final WebClient webClient;
+
     static Flux<Person> persons;
     static {
         persons = Flux.just(
@@ -49,5 +57,24 @@ public class PersonService {
 
     public Flux<Person> deletePerson(Integer id) {
         return persons.filter(person -> !person.id().equals(id));
+    }
+
+    public Flux<User> fetchUsers(){
+        return webClient
+                .get()
+                .uri("https://jsonplaceholder.typicode.com/users")
+                .retrieve()
+                .bodyToFlux(User.class)
+                // Process up to 5 users concurrently on the boundedElastic scheduler
+                .flatMap(user -> processUserConcurrently(user), 5);
+    }
+
+    private Flux<User> processUserConcurrently(User user) {
+        return Flux.just(user)
+                .publishOn(Schedulers.boundedElastic())
+                .doOnNext(u -> {
+                    // Simulate blocking/slow operation per user
+                    IO.println(Thread.currentThread().getName() + " processing user: " + u.id());
+                });
     }
 }
