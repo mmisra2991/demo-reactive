@@ -10,14 +10,16 @@ import java.time.Duration;
 
 @Service
 public class PersonService {
-
-    Flux<Person> persons = Flux.just(
-            new Person(1, "Alice"),
-            new Person(2, "Bob"),
-            new Person(3, "Charlie"),
-            new Person(4, "David"),
-            new Person(5, "Eve")
-    );
+    static Flux<Person> persons;
+    static {
+        persons = Flux.just(
+                new Person(1, "Alice"),
+                new Person(2, "Bob"),
+                new Person(3, "Charlie"),
+                new Person(4, "David"),
+                new Person(5, "Eve")
+        );
+    }
 
     public Flux<Person> getAllPersons() {
         BeanUtils.copyProperties(persons, Person.class);

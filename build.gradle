@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -29,8 +30,14 @@ dependencies {
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.48")
 }
 
-def sourceSets = project.extensions.getByType(JavaPluginExtension).sourceSets
-
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+bootRun {
+	jvmArgs += ["--enable-native-access=ALL-UNNAMED"]
+}
+
+test {
+	jvmArgs += ["--enable-native-access=ALL-UNNAMED"]
 }
