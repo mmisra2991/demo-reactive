@@ -5,6 +5,7 @@ import com.example.demo_reactive.dto.User;
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -18,6 +19,9 @@ import java.time.Duration;
 public class PersonService {
 
     private final WebClient webClient;
+
+    @Value("${external-url}")
+    private String externalUrl;
 
     static Flux<Person> persons;
     static {
@@ -62,7 +66,7 @@ public class PersonService {
     public Flux<User> fetchUsers(){
         return webClient
                 .get()
-                .uri("https://jsonplaceholder.typicode.com/users")
+                .uri(externalUrl)
                 .retrieve()
                 .bodyToFlux(User.class)
                 // Process up to 5 users concurrently on the boundedElastic scheduler
