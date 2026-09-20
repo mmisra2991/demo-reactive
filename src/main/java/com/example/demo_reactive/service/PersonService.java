@@ -2,7 +2,7 @@ package com.example.demo_reactive.service;
 
 import com.example.demo_reactive.dto.Person;
 import com.example.demo_reactive.dto.User;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class PersonService {
                 .retrieve()
                 .bodyToFlux(User.class)
                 // Process up to 5 users concurrently on the boundedElastic scheduler
-                .flatMap(user -> processUserConcurrently(user), 5);
+                .flatMap(this::processUserConcurrently, 5);
     }
 
     private Flux<User> processUserConcurrently(User user) {

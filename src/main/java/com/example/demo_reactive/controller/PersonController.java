@@ -4,14 +4,12 @@ import com.example.demo_reactive.dto.Person;
 import com.example.demo_reactive.dto.User;
 import com.example.demo_reactive.events.PersonEvent;
 import com.example.demo_reactive.service.PersonService;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +25,7 @@ public class PersonController {
     }
 
     @GetMapping(value = "/persons/{id}")
-    public Mono<Person> getPerson(@PathVariable("id") Integer id) {
+    public Mono<Person> getPerson(@PathVariable("id") @NonNull Integer id) {
         return personService.getPerson(id);
     }
 
@@ -37,7 +35,7 @@ public class PersonController {
     }
 
     @DeleteMapping(value = "/persons/{id}")
-    public Flux<Person> deletePerson(@PathVariable("id") Integer id){
+    public Flux<Person> deletePerson(@PathVariable("id") @NonNull Integer id){
         return personService.deletePerson(id);
     }
 
