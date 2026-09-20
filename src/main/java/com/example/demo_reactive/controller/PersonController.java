@@ -4,6 +4,7 @@ import com.example.demo_reactive.dto.Person;
 import com.example.demo_reactive.dto.User;
 import com.example.demo_reactive.events.PersonEvent;
 import com.example.demo_reactive.service.PersonService;
+import lombok.NonNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -37,7 +38,7 @@ public class PersonController {
     }
 
     @PutMapping(value = "/persons/{id}")
-    public Flux<Person> updatePerson(@RequestBody Person person, @PathVariable("id") Integer id){
+    public Flux<Person> updatePerson(@RequestBody @NonNull Person person, @NonNull @PathVariable("id") Integer id){
         return personService.updatePerson(person, id);
     }
 

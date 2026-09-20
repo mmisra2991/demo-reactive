@@ -1,6 +1,7 @@
 package com.example.demo_reactive.service;
 
 import com.example.demo_reactive.dto.Person;
+import lombok.NonNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -35,7 +36,7 @@ public class PersonService {
                .next();
     }
 
-    public Flux<Person> updatePerson(Person updatedPerson, Integer id) {
+    public Flux<Person> updatePerson(@NonNull Person updatedPerson,@NonNull Integer id) {
         return persons.map(existingPerson -> {
             if (existingPerson.id() == id) {
                 // Return a new instance with updated properties
