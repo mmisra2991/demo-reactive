@@ -49,7 +49,8 @@ public class PersonService {
     }
 
     public Flux<Person> updatePerson(@NonNull Person updatedPerson,@NonNull Integer id) {
-        return persons.map(existingPerson -> {
+        return persons
+                .map(existingPerson -> {
             if (existingPerson.id() == id) {
                 // Return a new instance with updated properties
                 IO.println("Updating person with id: " + id + " to new name: " + updatedPerson.name());
